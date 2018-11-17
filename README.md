@@ -1,2 +1,2 @@
 # Auto-sms-tplink
-Project to sends sms automatically with the tp-link mr6400 to update data limit of isp
+Project to send sms automatically with the tp-link mr6400 with the purpose of updating the data limit set by the ISP
