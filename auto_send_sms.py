@@ -57,12 +57,12 @@ def internet_upgrade_loop():
     threading.Timer(15, internet_upgrade_loop).start()
     if not internet_connection_up():
         if SEND_SMS:
-            send_log_message(message='Data limit upgrade sms sent, but it is not working ' + str(datetime.now()), end='\n')
-            print('Data limit upgrade sms sent, but it is not working ' + str(datetime.now()), end='\n')
+            send_log_message(message='Data limit upgrade sms sent, but it is not working ' + str(datetime.now()), flush=True)
+            print('Data limit upgrade sms sent, but it is not working ' + str(datetime.now()), flush=True)
         else:
             send_extra_message()
     else:
-        print('internet connected: ' + str(datetime.now()), end='\n')
+        print('internet connected: ' + str(datetime.now()), flush=True)
         SEND_SMS = False  # reset sms send loop
     
 
