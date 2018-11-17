@@ -23,6 +23,8 @@ def send_extra_message():
     Sends message
     Config this method to send an message automatically to your isp with the supported message
     """
+    global SEND_SMS
+    SEND_SMS = True
     sms_sender.send_sms('1GB EXTRA', '1280')
 
 
@@ -42,6 +44,7 @@ def internet_connection_up():
     try:
         conn.request("HEAD", "/")
         conn.close()
+        print("program thinks still connected to internet")
         return True
     except:
         conn.close()
@@ -54,6 +57,7 @@ def internet_upgrade_loop():
     This function checks every 15 seconds if the internet connection is lost.
     If the internet connection is lost the program sends an sms defined in send_extra_message
     """
+    global SEND_SMS
     threading.Timer(15, internet_upgrade_loop).start()
     if not internet_connection_up():
         if SEND_SMS:
@@ -66,9 +70,6 @@ def internet_upgrade_loop():
         SEND_SMS = False  # reset sms send loop
     
 
-
 if __name__ == '__main__':
     sms_sender = SMSSender('sms_config.ini')
     internet_upgrade_loop()
-
-    
