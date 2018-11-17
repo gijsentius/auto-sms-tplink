@@ -44,7 +44,6 @@ def internet_connection_up():
     try:
         conn.request("HEAD", "/")
         conn.close()
-        print("program thinks still connected to internet")
         return True
     except:
         conn.close()
