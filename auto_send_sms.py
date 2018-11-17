@@ -8,6 +8,8 @@ License: see LICENSE
 from tplink_sms import SMSSender
 import threading
 from datetime import datetime
+import os
+
 try:
     import httplib
 except:
