@@ -54,18 +54,15 @@ def internet_upgrade_loop():
     This function checks every 15 seconds if the internet connection is lost.
     If the internet connection is lost the program sends an sms defined in send_extra_message
     """
-    date_format_linux = '%Y,%-m,%-d,%-H,%-M,%-S'
-    date_format_windows = '%Y,%m,%d,%H,%M,%S'
-    date_format = date_format_windows if os.name == 'nt' else date_format_linux
     threading.Timer(15, internet_upgrade_loop).start()
     if not internet_connection_up():
         if SEND_SMS:
-            send_log_message(message='Data limit upgrade sms sent, but it is not working ' + datetime.now())  # using default phone number
-            print('Data limit upgrade sms sent, but it is not working ' + datetime.now())
+            send_log_message(message='Data limit upgrade sms sent, but it is not working ' + str(datetime.now()))  # using default phone number
+            print('Data limit upgrade sms sent, but it is not working ' + str(datetime.now()))
         else:
             send_extra_message()
     else:
-        print('internet connected:' + datetime.now().strftime(date_format))
+        print('internet connected: ' + str(datetime.now()))
         SEND_SMS = False  # reset sms send loop
     
 
