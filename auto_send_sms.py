@@ -59,6 +59,7 @@ def internet_upgrade_loop():
         else:
             send_extra_message()
     else:
+        print('internet connected:' + datetime.now())
         SEND_SMS = False  # reset sms send loop
     
 
