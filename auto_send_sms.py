@@ -9,14 +9,34 @@ from tplink_sms import SMSSender
 import threading
 from datetime import datetime
 import logging
+import sys
 try:
     import httplib
 except:
     import http.client as httplib
 
-SEND_SMS = False  # Used for checking if a sms is sent to revive the internet
-logging.basicConfig(level=logging.INFO)  # INFO is standard: change to see more of the logging
-CHECK_DELAY = 15  # standard time to wait before running another round of checking
+# configs
+CHECK_DELAY = 2  # standard time to wait before running another round of checking
+SEND_SMS = False  # used for checking if a sms is sent to revive the internet
+FILENAME = "info.log"  # the name of the log file (may include full path)
+
+# logging configuration
+logger = logging.getLogger('auto-sms-logger')
+logger.propagate = 0  # did not think the propagate setting was important
+
+# create a file handler and stream handler
+f_handler = logging.FileHandler(FILENAME)
+f_handler.setLevel(logging.DEBUG)
+s_handler = logging.StreamHandler()
+s_handler.setLevel(logging.INFO)
+
+# assign format to handlers
+formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s')
+f_handler.setFormatter(formatter)
+s_handler.setFormatter(formatter)
+
+logger.addHandler(s_handler)
+logger.addHandler(f_handler)
 
 
 def send_extra_message():
@@ -49,14 +69,14 @@ def data_limit_reached():
         conn.request("GET", "/")
         response = str(conn.getresponse().read())
         if hostname in response:
-            logging.debug(hostname + ' was found at ' + str(datetime.now()))
+            logger.debug(hostname + ' was found')
             return False
         else:
             conn.close()
-            logging.debug(hostname + ' was NOT found at ' + str(datetime.now()))
+            logger.debug(hostname + ' was NOT found')
             return True
     except Exception as e:
-        logging.error("testing connectivity: " + str(e))
+        logger.error('testing connectivity: ', exc_info=True)
     return True
 
 
@@ -70,14 +90,14 @@ def internet_upgrade_loop():
     threading.Timer(CHECK_DELAY, internet_upgrade_loop).start()
     if data_limit_reached():
         if SEND_SMS:
-            send_log_message(message='Upgrade sms sent: connection still down ' + str(datetime.now()))
-            logging.warning('Upgrade sms sent: connection still down ' + str(datetime.now()))
+            send_log_message(message='Upgrade sms sent: connection still down')
+            logger.warning('Upgrade sms sent: connection still down')
         else:
-            logging.info('Data limit reached: ' + str(datetime.now()))
+            logger.info('Data limit reached')
             send_extra_message()
-            logging.info('SMS sent to ISP: ' + str(datetime.now()))
+            logger.info('SMS sent to ISP')
     else:
-        logging.info('internet connected: ' + str(datetime.now()))
+        logger.info('internet connected')
         SEND_SMS = False  # reset sms send loop
 
 
