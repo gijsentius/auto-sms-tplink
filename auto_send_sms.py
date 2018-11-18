@@ -18,6 +18,7 @@ except:
 # configs
 CHECK_DELAY = 2  # standard time to wait before running another round of checking
 SEND_SMS = False  # used for checking if a sms is sent to revive the internet
+ALERT = False
 FILENAME = "info.log"  # the name of the log file (may include full path)
 
 # logging configuration
@@ -86,13 +87,13 @@ def internet_upgrade_loop():
     This function checks every CHECK_DELAY seconds if the internet connection is lost.
     If the internet connection is lost the program sends an sms defined in send_extra_message
     """
-    global SEND_SMS, CHECK_DELAY
+    global SEND_SMS, CHECK_DELAY, ALERT
     threading.Timer(CHECK_DELAY, internet_upgrade_loop).start()
     if data_limit_reached():
-        if SEND_SMS:
+        if SEND_SMS and not ALERT:
             send_log_message(message='Upgrade sms sent: connection still down')
             logger.warning('Upgrade sms sent: connection still down')
-            SEND_SMS = False
+            ALERT = True
         else:
             logger.info('Data limit reached')
             send_extra_message()
@@ -100,6 +101,7 @@ def internet_upgrade_loop():
     else:
         logger.info('internet connected')
         SEND_SMS = False  # reset sms send loop
+        ALERT = False  # reset alert message
 
 
 if __name__ == '__main__':

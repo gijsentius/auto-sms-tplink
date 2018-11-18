@@ -4,6 +4,7 @@ Send SMS via TP-Link TL-MR6400.
 This code shows how to send an SMS using the admin GUI of the above router.
 Author: Fabio Pani <fabiux@fabiopani.it> & Gijs Entius <g.m.entius@gmail.com>
 Github: https://github.com/fabiux/tplink_sms & 
+TODO fix logging @see auto_send_sms & 501 error response code
 License: see LICENSE
 """
 from hashlib import md5
