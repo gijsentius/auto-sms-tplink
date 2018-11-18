@@ -8,10 +8,7 @@ License: see LICENSE
 from tplink_sms import SMSSender
 import threading
 from datetime import datetime
-import os
 import logging
-import socket
-import requests
 try:
     import httplib
 except:
@@ -82,7 +79,7 @@ def internet_upgrade_loop():
     else:
         logging.info('internet connected: ' + str(datetime.now()))
         SEND_SMS = False  # reset sms send loop
-    
+
 
 if __name__ == '__main__':
     sms_sender = SMSSender('sms_config.ini')
