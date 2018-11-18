@@ -92,6 +92,7 @@ def internet_upgrade_loop():
         if SEND_SMS:
             send_log_message(message='Upgrade sms sent: connection still down')
             logger.warning('Upgrade sms sent: connection still down')
+            SEND_SMS = False
         else:
             logger.info('Data limit reached')
             send_extra_message()
