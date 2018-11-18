@@ -13,6 +13,9 @@ from time import strftime
 import requests
 import configparser
 import os
+import logging
+
+logging.basicConfig(level=logging.INFO)  # INFO is standard: change to see more of the logging
 
 
 class SMSSender:
@@ -64,7 +67,7 @@ class SMSSender:
         s = requests.Session()
         r = s.get(self.router_url + self.router_login_path, cookies=cookie)
         if r.status_code != 200:
-            print("status code:" + r.status_code)
+            logging.info("status code:" + str(r.status_code))
             exit()
         hashlogin = r.text.split('/')[3]
         sms_form_page = self.router_url + hashlogin + self.router_sms_referer
@@ -74,5 +77,5 @@ class SMSSender:
         s.headers.update({'referer': sms_form_page})
         r = s.post(sms_action_page, json=sms, cookies=cookie)
         if r.status_code != 200:
-            print("status code:" + r.status_code)
+            logging.info("status code:" + str(r.status_code))
 
